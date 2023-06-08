@@ -1,0 +1,19 @@
+# RStudio files
+.Rproj.user/
+
+# History files
+.Rhistory
+.Rapp.history
+
+# knitr and R markdown default cache directories
+*_cache/
+/cache/
+
+# MS
+~$*
+
+# Session Data files
+.RData
+
+# dev files
+dev/
