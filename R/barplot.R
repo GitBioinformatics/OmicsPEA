@@ -1,23 +1,7 @@
-#' @rdname dotplot
-setGeneric(
-  "dotplot",
-  function (obj, ...)
-    standardGeneric("dotplot")
-)
-
-#' @rdname dotplot
-#' @exportMethod dotplot
-setMethod(
-  "dotplot",
-  signature(obj = "data.frame"), function(obj, ...) {
-    dotplot.default(obj = obj, ...)
-  })
-
-#' @rdname dotplot
-#' @title dotplot for enrichment result
+#' @title barplot for enrichment result
 #'
 #' @description
-#' plot dotplot for enrichment result by use \code{ggplot2} package.
+#' plot barplot for enrichment result by use \code{ggplot2} package.
 #'
 #' @author Abao Xing \url{https://github.com/GitBioinformatics}
 #'
@@ -26,7 +10,6 @@ setMethod(
 #'
 #' @param obj a enriched result in data.frame format.
 #' @param x variable for x-axis, one of 'GeneRatio' (default), 'BgRatio' and 'count.enriched'.
-#' @param point.size.by variable that used to scale the sizes of categories.
 #' @param color.by variable that used to color enriched terms,
 #' 'arg' should be one of 'pvalue', 'p.adjust' (default), 'qvalue'.
 #' @param order.by The order of the Y-axis, NULL (default) means no sorting.
@@ -35,10 +18,10 @@ setMethod(
 #' @param order.show A number or a vector of terms. If it is a number,
 #' the first n terms will be displayed. If it is a vector of terms,
 #' the selected terms will be displayed.
-#' @param point.size.range a vector of two numbers, set the point size.
-#' @param point.color.range a vector of two color values, set the colors.
-#' @param font.size font size
+#' @param fill.color.range a vector of two color values, set the colors.
+#' @param font.sizefont size
 #' @param x.title A character string or expression indicating a title of x-axis If NULL, the title is shown by default.
+#' @param y.title A character string or expression indicating a title of y-axis If NULL, the title is shown by default.
 #' @param legend.size.title A character string or expression indicating a title of guide (size). If NULL, the title is shown by default.
 #' @param legend.color.title A character string or expression indicating a title of guide (color). If NULL, the title is shown by default.
 #' @param legend.position the position of legends ("none", "left", "right" (default), "bottom", "top", or two-element numeric vector [0, 1])
@@ -56,11 +39,10 @@ setMethod(
 #' colnames(Metabolites.Pathways) <- c('Metabolites', 'itemId', 'pathwayName')
 #' PEA.RES = PEA(omics.id.set = Metabolites$ID, omics.pathway.db = Metabolites.Pathways, min.enrich.size = 1)
 #'
-#' dotplot(
+#' barplot(
 #'   obj = PEA.RES,
 #'   x = 'omicsRatio',
 #'   color.by = 'p.adjust',
-#'   point.size.by = 'count.enriched',
 #'   order.by = 'x',
 #'   order.decreasing = FALSE,
 #'   order.show = c('Phospholipid Metabolism',
@@ -83,35 +65,34 @@ setMethod(
 #' Gene.Expression.Demo$gene_id <- mapIds(org.Hs.eg.db, Gene.Expression.Demo$gene_symbol, column = "ENTREZID", keytype = "SYMBOL")
 #' PEA.RES = PEA(omics.id.set = Gene.Expression.Demo$gene_id, omics.pathway.db = KEGG.Pathways, min.enrich.size = 10, ratio.numeric = FALSE)
 #'
-#' dotplot(
+#' colnames(PEA.RES)
+#' barplot(
 #'   obj = PEA.RES,
-#'   x = 'omicsRatio',
+#'   x = "count.enriched",
 #'   color.by = 'p.adjust',
-#'   point.size.by = 'count.enriched',
 #'   order.by = 'x',
 #'   order.decreasing = TRUE,
 #'   order.show = 10,
+#'   font.size = 10,
+#'   x.title = 'Enriched Count',
+#'   y.title = NULL,
 #'   legend.size.title = NULL,
 #'   legend.color.title = NULL,
-#'   legend.position = 'bottom',
-#'   legend.direction = 'horizontal',
-#' ) + guides(size  = guide_legend(order = 2), color = guide_colorbar(order = 1)) +
-#'   theme(
-#'    plot.margin = margin(t = 5, r = 20, b = 5, l = 5, unit = 'points')
-#'  )
+#'   legend.position = 'right',
+#'   legend.direction = 'vertical'
+#' )
 #'
-dotplot.default <- function(
+barplot <- function(
     obj,
     x = "omicsRatio",
     color.by = 'p.adjust',
-    point.size.by = "count.enriched",
-    point.size.range = c(3, 8),
-    point.color.range = c('red', 'blue'),
     order.by = NULL,
     order.decreasing = FALSE,
     order.show = 10,
+    fill.color.range = c('red', 'blue'),
     font.size = 12,
     x.title = NULL,
+    y.title = NULL,
     legend.size.title = NULL,
     legend.color.title = NULL,
     legend.position = 'right',
@@ -123,7 +104,6 @@ dotplot.default <- function(
 
   color.by <- match.arg(color.by, c('pvalue', 'p.adjust', 'qvalue'))
   x <- match.arg(x, c('omicsRatio', 'BgRatio', 'count.enriched'))
-  point.size.by <- match.arg(point.size.by, c('omicsRatio', 'BgRatio', 'count.enriched'))
 
   legend.direction <- match.arg(legend.direction, c('horizontal', 'vertical'))
   if (class(legend.position) == 'character' && length(legend.position) == 1) {
@@ -153,30 +133,22 @@ dotplot.default <- function(
     obj <- obj %>% dplyr::filter(ID %in% order.show)
   }
 
-  gg <- ggplot(obj, aes_string(x = x, y = 'ID', size = point.size.by, color = color.by)) +
-    geom_point() +
-    scale_color_continuous(
-      low = point.color.range[1],
-      high = point.color.range[2],
-      name = color.by,
-      guide = guide_colorbar(reverse = TRUE)
-    ) +
-    ylab(NULL) + ggtitle('') +
-    scale_size(range = point.size.range) +
-    guides(
-      size  = guide_legend(order = 1),
-      color = guide_colorbar(order = 2, title = ifelse(test = is.null(legend.color.title), yes = color.by, no = legend.color.title))
-    ) + labs(
-      size = ifelse(test = is.null(legend.size.title), yes = point.size.by, no = legend.size.title),
-      x = ifelse(test = is.null(x.title), yes = x, no = x.title),
-    )
+  gg <- ggplot(data = obj) +
+    geom_bar(aes_string(x = 'ID', y = x, fill = color.by), stat = 'identity') +
+    coord_flip() +
+    scale_fill_gradient(low = fill.color.range[1], high = fill.color.range[2]) +
+    xlab(ifelse(test = is.null(y.title), yes = 'Pathway Name', no = y.title)) +
+    ylab(ifelse(test = is.null(x.title), yes = x, no = x.title)) +
+    scale_y_continuous(expand = c(0, 0)) +
+    scale_x_discrete(expand = c(0, 0))
 
   gg <- gg + theme_bw() + theme(
     legend.title = element_text(family = NA, face = 'plain', colour = '#000000', size = font.size, hjust = 0, vjust = 0.5, angle = 0, lineheight = 0.9, margin = margin(t = 0, r = 0, b = 5.5, l = 0, unit = 'pt')),
     legend.text = element_text(family = NA, face = 'plain', colour = '#000000', size = font.size, hjust = 0, vjust = 0.5, angle = 0.5, lineheight = 0.9, margin = margin(t = 0, r = 0, b = 0, l = 0, unit = 'pt')),
     axis.text.y.left = element_text(family = NA, face = 'plain', colour = '#000000', size = font.size, hjust = 1, vjust = 0.5, angle = 0, lineheight = 0.9, margin = margin(t = 0, r = 5.5, b = 0, l = 0, unit = 'pt')),
     axis.text.x.bottom = element_text(family = NA, face = 'plain', colour = '#000000', size = font.size, hjust = 0.5, vjust = 0, angle = 0, lineheight = 0.9, margin = margin(t = 5.5, r = 0, b = 0, l = 0, unit = 'pt')),
-    axis.title.x.bottom = element_text(family = NA, face = 'plain', colour = '#000000', size = font.size, hjust = 0.5, vjust = 1, angle = 0, lineheight = 0.9, margin = margin(t = 5.5, r = 0, b = 0, l = 0, unit = 'pt')),
+    axis.title.y.left = element_text(family = NA, face = 'plain', colour = '#000000', size = font.size, hjust = 0.5, vjust = 0.5, angle = 90, lineheight = 0.9, margin = margin(t = 5.5, r = 0, b = 0, l = 0, unit = 'pt')),
+    axis.title.x.bottom = element_text(family = NA, face = 'plain', colour = '#000000', size = font.size, hjust = 0.5, vjust = 0.5, angle = 0, lineheight = 0.9, margin = margin(t = 5.5, r = 0, b = 0, l = 0, unit = 'pt')),
     legend.position = legend.position,
     legend.direction = legend.direction,
     legend.justification = "right"

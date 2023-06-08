@@ -1,14 +1,14 @@
 # OmicsPEA: An R Package for Pathway Enrichment Analysis (PEA) and Visualization of Omics Data
 
-`OmicsPEA `is an R package designed for the visualization and analysis of pathway enrichment analysis (PEA) in omics data. It provides a comprehensive set of functions to explore and interpret high-throughput genomics, transcriptomics, proteomics, and metabolomics data in the context of biological pathways.
+`OmicsPEA`is an R package designed for the visualization and analysis of pathway enrichment analysis (PEA) in omics data. It provides a comprehensive set of functions to explore and interpret high-throughput genomics, transcriptomics, proteomics, and metabolomics data in the context of biological pathways.
 
-With `OmicsPEA `, researchers can perform pathway enrichment analysis to identify overrepresented biological pathways or gene sets that are significantly associated with their omics data. The package integrates various statistical methods and algorithms to assess the enrichment significance, including hypergeometric test, gene set enrichment analysis (GSEA), and functional class scoring.
+With `OmicsPEA`, researchers can perform pathway enrichment analysis to identify overrepresented biological pathways or gene sets that are significantly associated with their omics data. The package integrates various statistical methods and algorithms to assess the enrichment significance, including hypergeometric test, gene set enrichment analysis (GSEA), and functional class scoring.
 
-One of the key features of `OmicsPEA ` is its interactive and customizable visualization capabilities. It offers a range of visualization tools, such as pathway enrichment plots, gene set heatmaps, and network diagrams, allowing users to intuitively explore and interpret the enrichment results. These visualizations facilitate the identification of key pathways and genes contributing to the biological significance of the omics data.
+One of the key features of `OmicsPEA` is its interactive and customizable visualization capabilities. It offers a range of visualization tools, such as pathway enrichment plots, gene set heatmaps, and network diagrams, allowing users to intuitively explore and interpret the enrichment results. These visualizations facilitate the identification of key pathways and genes contributing to the biological significance of the omics data.
 
 Furthermore, OmicsPEA supports multiple omics data types and pathway databases, enabling researchers to analyze diverse types of omics data and utilize a wide range of pathway knowledge resources. The package seamlessly integrates with popular bioinformatics databases, such as [Kyoto Encyclopedia of Genes and Genomes (KEGG)](https://www.genome.jp/kegg/), [WikiPathways](https://www.wikipathways.org/), and [Reactome](https://reactome.org/).
 
-In summary, `OmicsPEA ` is a powerful R package that empowers researchers to perform pathway enrichment analysis on omics data, providing a comprehensive set of tools for visualization, statistical analysis, and interpretation of biological pathways. It facilitates the identification of key biological processes and pathways associated with omics data, aiding in the understanding of complex biological systems.
+In summary, `OmicsPEA` is a powerful R package that empowers researchers to perform pathway enrichment analysis on omics data, providing a comprehensive set of tools for visualization, statistical analysis, and interpretation of biological pathways. It facilitates the identification of key biological processes and pathways associated with omics data, aiding in the understanding of complex biological systems.
 
 ## Installation
 
@@ -138,7 +138,6 @@ dotplot(
 ```
 
 <img src="man/imgs/MetabolitesPEA.png" width="55%" align="left"/>
-
 
 
 
