@@ -137,7 +137,50 @@ dotplot(
   )
 ```
 
-<img src="man/imgs/MetabolitesPEA.png" width="55%" align="left"/>
+<img src="man/imgs/dotplot_demo.png" width="55%" align="left"/>
+
+### barplot
+
+Plot barplot for enrichment result by use `ggplot2` package.
+
+```R
+library(OmicsPEA)
+library(org.Hs.eg.db)
+library(AnnotationDbi)
+
+data(Gene.Expression.Demo)
+data(KEGG.Pathways)
+colnames(KEGG.Pathways) <- c('itemId', 'gene_symbol', 'PathwayID', 'pathwayName')
+Gene.Expression.Demo$gene_id <- mapIds(org.Hs.eg.db, Gene.Expression.Demo$gene_symbol, column = "ENTREZID", keytype = "SYMBOL")
+PEA.RES = PEA(omics.id.set = Gene.Expression.Demo$gene_id, omics.pathway.db = KEGG.Pathways, min.enrich.size = 10, ratio.numeric = FALSE)
+
+colnames(PEA.RES)
+barplot(
+  obj = PEA.RES,
+  x = "count.enriched",
+  color.by = 'p.adjust',
+  order.by = 'x',
+  order.decreasing = TRUE,
+  order.show = 10,
+  font.size = 10,
+  x.title = 'Enriched Count',
+  y.title = NULL,
+  legend.size.title = NULL,
+  legend.color.title = NULL,
+  legend.position = 'right',
+  legend.direction = 'vertical'
+)
+```
+
+<img src="man/imgs/barplot_demo.png" width="55%" align="left"/>
+
+
+
+
+
+
+
+
 
 
 
