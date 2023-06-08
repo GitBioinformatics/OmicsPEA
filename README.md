@@ -139,6 +139,8 @@ dotplot(
 
 <img src="man/imgs/dotplot_demo.png" width="85%" align="left"/>
 
+-----
+
 ### barplot
 
 Plot barplot for enrichment result by use `ggplot2` package.
