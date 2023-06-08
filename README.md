@@ -137,7 +137,7 @@ dotplot(
   )
 ```
 
-<img src="man/imgs/dotplot_demo.png" width="55%" align="left"/>
+<img src="man/imgs/dotplot_demo.png" width="85%" align="left"/>
 
 ### barplot
 
@@ -172,7 +172,7 @@ barplot(
 )
 ```
 
-<img src="man/imgs/barplot_demo.png" width="55%" align="left"/>
+<img src="man/imgs/barplot_demo.png" width="85%" align="left"/>
 
 
 
